@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel | Süreç YKS</title>
+    <link rel="stylesheet" href="../css/style.css"/>
+    <link rel="icon" type="image/x-icon" href="../images/logo.png">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <nav class="dash-nav">
+        <div class="dash-brand">
+            <img src="../images/logo.png" alt="Süreç YKS logosu" class="dash-brand-mark">
+            Süreç YKS
+        </div>
+
+        <ul class="dash-links">
+            <li><a href="main.html" class="active">Panel</a></li>
+            <li><a href="#">Çalışma Planı</a></li>
+            <li><a href="#">Denemeler</a></li>
+            <li><a href="#">Kaynaklar</a></li>
+        </ul>
+
+        <div class="dash-user">
+            <button type="button" class="dash-avatar" id="userMenuBtn" aria-haspopup="true" aria-expanded="false" aria-label="Kullanıcı menüsü">AY</button>
+            <div class="user-dropdown" id="userDropdown" hidden>
+                <div class="user-dropdown-profile">
+                    <div class="user-dropdown-avatar" id="dropdownAvatar">AY</div>
+                    <div class="user-dropdown-info">
+                        <span class="user-dropdown-name" id="dropdownName">Kullanıcı</span>
+                        <span class="user-dropdown-email" id="dropdownEmail"></span>
+                    </div>
+                </div>
+                <hr class="user-dropdown-divider">
+                <ul class="user-dropdown-actions">
+                    <li>
+                        <button type="button" class="user-dropdown-btn" data-action="profile">
+                            <span class="user-dropdown-icon"></span>
+                            Profili Düzenle
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="user-dropdown-btn user-dropdown-btn--logout" data-action="logout">
+                            <span class="user-dropdown-icon"></span>
+                            Çıkış Yap
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="dash-hero">
+        <div>
+            <h1>Tekrar hoş geldin, Ayşe.</h1>
+            <p id="heroTaskText">Bugün 3 görev seni bekliyor. Hadi başlayalım.</p>
+        </div>
+        <div class="streak-pill">
+            <span class="flame">🔥</span>
+            12 günlük seri
+        </div>
+    </section>
+
+    <div class="dash-grid">
+
+        <main class="dash-main">
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Bugünün Planı</h2>
+                    <div class="card-head-actions">
+                        <button type="button" class="add-task-btn" id="openAddTaskBtn">
+                            <span class="add-task-plus">+</span>
+                            Yeni Görev
+                        </button>
+                        <a href="#">Tüm planı gör</a>
+                    </div>
+                </div>
+
+                <ul class="plan-list" id="todayPlanList"></ul>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2>Son Deneme Sonuçların</h2>
+                    <div class="card-head-actions">
+                        <button type="button" class="add-task-btn" id="openAddDenemeBtn">
+                            <span class="add-task-plus">+</span>
+                            Yeni Deneme
+                        </button>
+                        <button type="button" class="link-btn" id="openDenemeHistoryBtn">Geçmişi gör</button>
+                    </div>
+                </div>
+                <div id="denemeDisplay">
+                    <div class="deneme-empty">Henüz deneme sonucu girilmedi.</div>
+                </div>
+            </div>
+
+        </main>
+
+        <aside class="dash-side">
+
+            <div class="card countdown-card">
+                <h2>YKS'ye Kalan Süre</h2>
+                <div class="countdown-ring-wrap">
+                    <div>
+                        <span class="countdown-number" id="countdownNumber">--</span>
+                        <span class="countdown-unit">gün</span>
+                    </div>
+                </div>
+                <p class="countdown-date">Sınav tarihi: 19 Haziran 2027</p>
+            </div>
+
+            <div class="card">
+                <h2>Hızlı Erişim</h2>
+                <ul class="quick-access-list">
+                    <li>
+                        <button type="button" class="quick-access-btn" data-action="yeni-deneme">
+                            <span class="plan-subject" style="background-color:#2563eb;"></span>
+                            <span class="quick-access-label">Yeni deneme gir</span>
+                            <span class="quick-access-arrow">›</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="quick-access-btn" data-action="konu-eksikleri">
+                            <span class="plan-subject" style="background-color:#16a34a;"></span>
+                            <span class="quick-access-label">Konu eksiklerimi gör</span>
+                            <span class="quick-access-arrow">›</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="quick-access-btn" data-action="soru-bankasi">
+                            <span class="plan-subject" style="background-color:#fbbf24;"></span>
+                            <span class="quick-access-label">Soru bankasını aç</span>
+                            <span class="quick-access-arrow">›</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card quote-card">
+                <div class="quote-icon">"</div>
+                <blockquote class="quote-text" id="quoteText"></blockquote>
+                <cite class="quote-author" id="quoteAuthor"></cite>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <div class="modal-overlay" id="addTaskOverlay" hidden>
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="addTaskTitle">
+            <div class="modal-head">
+                <h2 id="addTaskTitle">Yeni Görev Ekle</h2>
+                <button type="button" class="modal-close" id="closeAddTaskBtn" aria-label="Kapat">✕</button>
+            </div>
+
+            <form id="addTaskForm">
+                <label class="modal-label" for="taskDers">Ders</label>
+                <input type="text" id="taskDers" name="ders" placeholder="Örn. Matematik" required>
+
+                <label class="modal-label" for="taskKonu">Konu</label>
+                <input type="text" id="taskKonu" name="konu" placeholder="Örn. Türev Tekrarı" required>
+
+                <label class="modal-label" for="taskSoruSayisi">Soru Sayısı</label>
+                <input type="number" id="taskSoruSayisi" name="soruSayisi" placeholder="Örn. 30" min="1" required>
+
+                <span class="modal-label">Renk</span>
+                <div class="color-picker" id="colorPicker" role="radiogroup" aria-label="Renk seçimi">
+                    <button type="button" class="color-swatch selected" data-color="#2563eb" style="background-color:#2563eb;" aria-label="Mavi" aria-pressed="true"></button>
+                    <button type="button" class="color-swatch" data-color="#16a34a" style="background-color:#16a34a;" aria-label="Yeşil" aria-pressed="false"></button>
+                    <button type="button" class="color-swatch" data-color="#fbbf24" style="background-color:#fbbf24;" aria-label="Sarı" aria-pressed="false"></button>
+                    <button type="button" class="color-swatch" data-color="#7dd3fc" style="background-color:#7dd3fc;" aria-label="Açık Mavi" aria-pressed="false"></button>
+                </div>
+
+                <button type="submit" class="submit-button">Görevi Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── Add deneme modal ─────────────────────────────────────── -->
+    <div class="modal-overlay" id="addDenemeOverlay" hidden>
+        <div class="modal-card modal-card--wide" role="dialog" aria-modal="true" aria-labelledby="addDenemeTitle">
+            <div class="modal-head">
+                <h2 id="addDenemeTitle">Yeni Deneme Ekle</h2>
+                <button type="button" class="modal-close" id="closeAddDenemeBtn" aria-label="Kapat">✕</button>
+            </div>
+            <form id="addDenemeForm">
+
+                <div class="deneme-subject-grid">
+
+                    <div class="deneme-subject-block">
+                        <div class="deneme-subject-label" style="color:#2563eb;">Matematik</div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="mat_dogru">Doğru</label>
+                            <input type="number" id="mat_dogru" name="mat_dogru" min="0" max="40" placeholder="0" required>
+                        </div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="mat_yanlis">Yanlış</label>
+                            <input type="number" id="mat_yanlis" name="mat_yanlis" min="0" max="40" placeholder="0" required>
+                        </div>
+                    </div>
+
+                    <div class="deneme-subject-block">
+                        <div class="deneme-subject-label" style="color:#16a34a;">Fen Bilimleri</div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="fen_dogru">Doğru</label>
+                            <input type="number" id="fen_dogru" name="fen_dogru" min="0" max="20" placeholder="0" required>
+                        </div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="fen_yanlis">Yanlış</label>
+                            <input type="number" id="fen_yanlis" name="fen_yanlis" min="0" max="20" placeholder="0" required>
+                        </div>
+                    </div>
+
+                    <div class="deneme-subject-block">
+                        <div class="deneme-subject-label" style="color:#f59e0b;">Sosyal Bilgiler</div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="sos_dogru">Doğru</label>
+                            <input type="number" id="sos_dogru" name="sos_dogru" min="0" max="20" placeholder="0" required>
+                        </div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="sos_yanlis">Yanlış</label>
+                            <input type="number" id="sos_yanlis" name="sos_yanlis" min="0" max="20" placeholder="0" required>
+                        </div>
+                    </div>
+
+                    <div class="deneme-subject-block">
+                        <div class="deneme-subject-label" style="color:#7c3aed;">Türkçe</div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="trk_dogru">Doğru</label>
+                            <input type="number" id="trk_dogru" name="trk_dogru" min="0" max="40" placeholder="0" required>
+                        </div>
+                        <div class="deneme-input-row">
+                            <label class="modal-label" for="trk_yanlis">Yanlış</label>
+                            <input type="number" id="trk_yanlis" name="trk_yanlis" min="0" max="40" placeholder="0" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="submit-button" style="margin-top:1.4rem;">Sonucu Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── Deneme history modal ──────────────────────────────────── -->
+    <div class="modal-overlay" id="denemeHistoryOverlay" hidden>
+        <div class="modal-card modal-card--wide" role="dialog" aria-modal="true" aria-labelledby="denemeHistoryTitle">
+            <div class="modal-head">
+                <h2 id="denemeHistoryTitle">Deneme Geçmişi</h2>
+                <button type="button" class="modal-close" id="closeDenemeHistoryBtn" aria-label="Kapat">✕</button>
+            </div>
+            <div id="denemeHistoryContent">
+                <p class="deneme-empty" style="text-align:center; color:var(--slate-soft);">Henüz deneme kaydı yok.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script src="../js/main.js"></script>
+
+</body>
+</html>
