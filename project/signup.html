@@ -4,25 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kayıt Ol | Süreç YKS</title>
+    <script>
+        (function () {
+            try {
+                var pref = localStorage.getItem('surecYksTheme') || 'system';
+                var theme = (pref === 'dark' || pref === 'light') ? pref :
+                    ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { /* private mode */ }
+        })();
+    </script>
     <link rel="stylesheet" href="../css/style.css"/>
     <link rel="icon" type="image/x-icon" href="../images/logo.png">
 </head>
 <body>
+    <div class="pref-controls">
+        <div class="lang-toggle-group">
+            <button type="button" class="lang-toggle-btn" data-lang-toggle="tr">TR</button>
+            <button type="button" class="lang-toggle-btn" data-lang-toggle="en">EN</button>
+        </div>
+        <button type="button" class="theme-toggle-btn" data-theme-toggle aria-label="Temayı değiştir">🌙</button>
+    </div>
     <div class="signup-container">
         <div class="form-card">
         <h1>Süreç YKS</h1>
-        <p>Aramıza hoş geldin.</p>
+        <p data-i18n="auth.welcomeAboard">Aramıza hoş geldin.</p>
         <form>
-        <input type="text" placeholder="Adınız" id="fname" name="fname" required>
-        <input type="text" placeholder="Soyadınız" id="lname" name="lname" required>
-        <input type="text" placeholder="Email Adresiniz" id="email" name="email" required>
-        <input type="password" placeholder="Şifreniz" id="password" name="password" required>
-        <input type="password" placeholder="Şifrenizi Doğrulayın" id="confpassword" name="confpassword" required>
-        <button class="submit-button" type="submit">Kayıt Ol</button>
-        <div class="login-link"><a href="index.html">Zaten Hesabın Var Mı?</a></div>
+        <input type="text" placeholder="Adınız" data-i18n-placeholder="auth.firstNamePlaceholder" id="fname" name="fname" required>
+        <input type="text" placeholder="Soyadınız" data-i18n-placeholder="auth.lastNamePlaceholder" id="lname" name="lname" required>
+        <input type="text" placeholder="Email Adresiniz" data-i18n-placeholder="auth.emailPlaceholder" id="email" name="email" required>
+        <input type="password" placeholder="Şifreniz" data-i18n-placeholder="auth.passwordPlaceholder" id="password" name="password" required>
+        <input type="password" placeholder="Şifrenizi Doğrulayın" data-i18n-placeholder="auth.confirmPasswordPlaceholder" id="confpassword" name="confpassword" required>
+        <button class="submit-button" type="submit" data-i18n="auth.signup">Kayıt Ol</button>
+        <div class="login-link"><a href="index.html" data-i18n="auth.hasAccount">Zaten Hesabın Var Mı?</a></div>
         </form>
         </div>
     </div>
+    <script src="../js/theme.js"></script>
+    <script src="../js/i18n.js"></script>
     <script src="../js/signup.js"></script>
 </body>
 </html>

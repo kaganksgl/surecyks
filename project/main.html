@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel | Süreç YKS</title>
+    <script>
+        (function () {
+            try {
+                var pref = localStorage.getItem('surecYksTheme') || 'system';
+                var theme = (pref === 'dark' || pref === 'light') ? pref :
+                    ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { /* private mode */ }
+        })();
+    </script>
     <link rel="stylesheet" href="../css/style.css"/>
     <link rel="icon" type="image/x-icon" href="../images/logo.png">
 </head>
@@ -18,10 +28,10 @@
         </div>
 
         <ul class="dash-links">
-            <li><a href="main.html" class="active">Panel</a></li>
-            <li><a href="#">Çalışma Planı</a></li>
-            <li><a href="#">Denemeler</a></li>
-            <li><a href="#">Kaynaklar</a></li>
+            <li><a href="main.html" class="active" data-i18n="nav.panel">Panel</a></li>
+            <li><a href="#planSection" data-i18n="nav.plan">Çalışma Planı</a></li>
+            <li><a href="#denemeSection" data-i18n="nav.denemeler">Denemeler</a></li>
+            <li><a href="pomodoro.html" data-i18n="hero.pomodoroButton">Pomodoro</a></li>
         </ul>
 
         <div class="dash-user">
@@ -35,17 +45,31 @@
                     </div>
                 </div>
                 <hr class="user-dropdown-divider">
+                <div class="user-dropdown-prefs">
+                    <div class="user-dropdown-pref-row">
+                        <span class="user-dropdown-pref-label" data-i18n="dropdown.theme">Tema</span>
+                        <button type="button" class="theme-toggle-btn theme-toggle-btn--sm" data-theme-toggle aria-label="Temayı değiştir">🌙</button>
+                    </div>
+                    <div class="user-dropdown-pref-row">
+                        <span class="user-dropdown-pref-label" data-i18n="dropdown.language">Dil</span>
+                        <div class="lang-toggle-group">
+                            <button type="button" class="lang-toggle-btn" data-lang-toggle="tr">TR</button>
+                            <button type="button" class="lang-toggle-btn" data-lang-toggle="en">EN</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="user-dropdown-divider">
                 <ul class="user-dropdown-actions">
                     <li>
                         <button type="button" class="user-dropdown-btn" data-action="profile">
                             <span class="user-dropdown-icon"></span>
-                            Profili Düzenle
+                            <span data-i18n="dropdown.profile">Profili Düzenle</span>
                         </button>
                     </li>
                     <li>
                         <button type="button" class="user-dropdown-btn user-dropdown-btn--logout" data-action="logout">
                             <span class="user-dropdown-icon"></span>
-                            Çıkış Yap
+                            <span data-i18n="dropdown.logout">Çıkış Yap</span>
                         </button>
                     </li>
                 </ul>
@@ -60,42 +84,53 @@
         </div>
         <div class="streak-pill">
             <span class="flame">🔥</span>
-            12 günlük seri
+            <span id="streakText" data-i18n="dropdown.streakCalculating">Seri hesaplanıyor…</span>
+            <span id="streakMilestoneBadge" class="streak-milestone" hidden></span>
         </div>
     </section>
+
+    <section class="stats-strip" id="statsStrip"></section>
 
     <div class="dash-grid">
 
         <main class="dash-main">
 
-            <div class="card">
+            <div class="card" id="planSection">
                 <div class="card-head">
-                    <h2>Bugünün Planı</h2>
+                    <h2 data-i18n="plan.title">Bugünün Planı</h2>
                     <div class="card-head-actions">
                         <button type="button" class="add-task-btn" id="openAddTaskBtn">
                             <span class="add-task-plus">+</span>
-                            Yeni Görev
+                            <span data-i18n="plan.newTask">Yeni Görev</span>
                         </button>
-                        <a href="#">Tüm planı gör</a>
                     </div>
                 </div>
 
                 <ul class="plan-list" id="todayPlanList"></ul>
             </div>
 
-            <div class="card">
+            <div class="card" id="denemeSection">
                 <div class="card-head">
-                    <h2>Son Deneme Sonuçların</h2>
+                    <h2 data-i18n="deneme.latestTitle">Son Deneme Sonuçların</h2>
                     <div class="card-head-actions">
                         <button type="button" class="add-task-btn" id="openAddDenemeBtn">
                             <span class="add-task-plus">+</span>
-                            Yeni Deneme
+                            <span data-i18n="deneme.newDeneme">Yeni Deneme</span>
                         </button>
-                        <button type="button" class="link-btn" id="openDenemeHistoryBtn">Geçmişi gör</button>
+                        <button type="button" class="link-btn" id="openDenemeHistoryBtn" data-i18n="deneme.seeHistory">Geçmişi gör</button>
                     </div>
                 </div>
                 <div id="denemeDisplay">
-                    <div class="deneme-empty">Henüz deneme sonucu girilmedi.</div>
+                    <div class="deneme-empty" data-i18n="deneme.empty">Henüz deneme sonucu girilmedi.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2 data-i18n="deneme.chartTitle">Net Takibi</h2>
+                </div>
+                <div id="netChartContainer">
+                    <div class="deneme-empty" data-i18n="deneme.chartEmpty">Grafiği görmek için en az bir deneme sonucu gir.</div>
                 </div>
             </div>
 
@@ -104,37 +139,30 @@
         <aside class="dash-side">
 
             <div class="card countdown-card">
-                <h2>YKS'ye Kalan Süre</h2>
+                <h2 data-i18n="countdown.title">YKS'ye Kalan Süre</h2>
                 <div class="countdown-ring-wrap">
                     <div>
                         <span class="countdown-number" id="countdownNumber">--</span>
-                        <span class="countdown-unit">gün</span>
+                        <span class="countdown-unit" data-i18n="countdown.unit">gün</span>
                     </div>
                 </div>
-                <p class="countdown-date">Sınav tarihi: 19 Haziran 2027</p>
+                <p class="countdown-date" id="countdownDate">Sınav tarihi: 19 Haziran 2027</p>
             </div>
 
             <div class="card">
-                <h2>Hızlı Erişim</h2>
+                <h2 data-i18n="quickAccess.title">Hızlı Erişim</h2>
                 <ul class="quick-access-list">
                     <li>
-                        <button type="button" class="quick-access-btn" data-action="yeni-deneme">
+                        <button type="button" class="quick-access-btn" data-action="yeni-gorev">
                             <span class="plan-subject" style="background-color:#2563eb;"></span>
-                            <span class="quick-access-label">Yeni deneme gir</span>
+                            <span class="quick-access-label" data-i18n="quickAccess.newTask">Yeni görev ekle</span>
                             <span class="quick-access-arrow">›</span>
                         </button>
                     </li>
                     <li>
-                        <button type="button" class="quick-access-btn" data-action="konu-eksikleri">
+                        <button type="button" class="quick-access-btn" data-action="yeni-deneme">
                             <span class="plan-subject" style="background-color:#16a34a;"></span>
-                            <span class="quick-access-label">Konu eksiklerimi gör</span>
-                            <span class="quick-access-arrow">›</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="quick-access-btn" data-action="soru-bankasi">
-                            <span class="plan-subject" style="background-color:#fbbf24;"></span>
-                            <span class="quick-access-label">Soru bankasını aç</span>
+                            <span class="quick-access-label" data-i18n="quickAccess.newDeneme">Yeni deneme gir</span>
                             <span class="quick-access-arrow">›</span>
                         </button>
                     </li>
@@ -154,21 +182,21 @@
     <div class="modal-overlay" id="addTaskOverlay" hidden>
         <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="addTaskTitle">
             <div class="modal-head">
-                <h2 id="addTaskTitle">Yeni Görev Ekle</h2>
+                <h2 id="addTaskTitle" data-i18n="modal.addTask.title">Yeni Görev Ekle</h2>
                 <button type="button" class="modal-close" id="closeAddTaskBtn" aria-label="Kapat">✕</button>
             </div>
 
             <form id="addTaskForm">
-                <label class="modal-label" for="taskDers">Ders</label>
-                <input type="text" id="taskDers" name="ders" placeholder="Örn. Matematik" required>
+                <label class="modal-label" for="taskDers" data-i18n="modal.addTask.subject">Ders</label>
+                <input type="text" id="taskDers" name="ders" placeholder="Örn. Matematik" data-i18n-placeholder="modal.addTask.subjectPlaceholder" required>
 
-                <label class="modal-label" for="taskKonu">Konu</label>
-                <input type="text" id="taskKonu" name="konu" placeholder="Örn. Türev Tekrarı" required>
+                <label class="modal-label" for="taskKonu" data-i18n="modal.addTask.topic">Konu</label>
+                <input type="text" id="taskKonu" name="konu" placeholder="Örn. Türev Tekrarı" data-i18n-placeholder="modal.addTask.topicPlaceholder" required>
 
-                <label class="modal-label" for="taskSoruSayisi">Soru Sayısı</label>
-                <input type="number" id="taskSoruSayisi" name="soruSayisi" placeholder="Örn. 30" min="1" required>
+                <label class="modal-label" for="taskSoruSayisi" data-i18n="modal.addTask.questionCount">Soru Sayısı</label>
+                <input type="number" id="taskSoruSayisi" name="soruSayisi" placeholder="Örn. 30" data-i18n-placeholder="modal.addTask.questionCountPlaceholder" min="1" required>
 
-                <span class="modal-label">Renk</span>
+                <span class="modal-label" data-i18n="modal.addTask.color">Renk</span>
                 <div class="color-picker" id="colorPicker" role="radiogroup" aria-label="Renk seçimi">
                     <button type="button" class="color-swatch selected" data-color="#2563eb" style="background-color:#2563eb;" aria-label="Mavi" aria-pressed="true"></button>
                     <button type="button" class="color-swatch" data-color="#16a34a" style="background-color:#16a34a;" aria-label="Yeşil" aria-pressed="false"></button>
@@ -176,7 +204,7 @@
                     <button type="button" class="color-swatch" data-color="#7dd3fc" style="background-color:#7dd3fc;" aria-label="Açık Mavi" aria-pressed="false"></button>
                 </div>
 
-                <button type="submit" class="submit-button">Görevi Ekle</button>
+                <button type="submit" class="submit-button" data-i18n="modal.addTask.submit">Görevi Ekle</button>
             </form>
         </div>
     </div>
@@ -185,64 +213,34 @@
     <div class="modal-overlay" id="addDenemeOverlay" hidden>
         <div class="modal-card modal-card--wide" role="dialog" aria-modal="true" aria-labelledby="addDenemeTitle">
             <div class="modal-head">
-                <h2 id="addDenemeTitle">Yeni Deneme Ekle</h2>
+                <h2 id="addDenemeTitle" data-i18n="modal.addDeneme.title">Yeni Deneme Ekle</h2>
                 <button type="button" class="modal-close" id="closeAddDenemeBtn" aria-label="Kapat">✕</button>
             </div>
             <form id="addDenemeForm">
 
-                <div class="deneme-subject-grid">
+                <label class="modal-label" for="denemeTarih" data-i18n="modal.addDeneme.date">Tarih</label>
+                <input type="date" id="denemeTarih" name="tarih" required>
 
-                    <div class="deneme-subject-block">
-                        <div class="deneme-subject-label" style="color:#2563eb;">Matematik</div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="mat_dogru">Doğru</label>
-                            <input type="number" id="mat_dogru" name="mat_dogru" min="0" max="40" placeholder="0" required>
-                        </div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="mat_yanlis">Yanlış</label>
-                            <input type="number" id="mat_yanlis" name="mat_yanlis" min="0" max="40" placeholder="0" required>
-                        </div>
-                    </div>
+                <label class="modal-label" for="denemeSinavTuru" style="margin-top:0.6rem;" data-i18n="modal.addDeneme.examType">Sınav Türü</label>
+                <select id="denemeSinavTuru" name="sinav_turu" required>
+                    <option value="" disabled selected data-i18n="modal.addDeneme.select">Seçiniz</option>
+                    <option value="TYT">TYT</option>
+                    <option value="AYT">AYT</option>
+                    <option value="YDT">YDT</option>
+                </select>
 
-                    <div class="deneme-subject-block">
-                        <div class="deneme-subject-label" style="color:#16a34a;">Fen Bilimleri</div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="fen_dogru">Doğru</label>
-                            <input type="number" id="fen_dogru" name="fen_dogru" min="0" max="20" placeholder="0" required>
-                        </div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="fen_yanlis">Yanlış</label>
-                            <input type="number" id="fen_yanlis" name="fen_yanlis" min="0" max="20" placeholder="0" required>
-                        </div>
-                    </div>
-
-                    <div class="deneme-subject-block">
-                        <div class="deneme-subject-label" style="color:#f59e0b;">Sosyal Bilgiler</div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="sos_dogru">Doğru</label>
-                            <input type="number" id="sos_dogru" name="sos_dogru" min="0" max="20" placeholder="0" required>
-                        </div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="sos_yanlis">Yanlış</label>
-                            <input type="number" id="sos_yanlis" name="sos_yanlis" min="0" max="20" placeholder="0" required>
-                        </div>
-                    </div>
-
-                    <div class="deneme-subject-block">
-                        <div class="deneme-subject-label" style="color:#7c3aed;">Türkçe</div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="trk_dogru">Doğru</label>
-                            <input type="number" id="trk_dogru" name="trk_dogru" min="0" max="40" placeholder="0" required>
-                        </div>
-                        <div class="deneme-input-row">
-                            <label class="modal-label" for="trk_yanlis">Yanlış</label>
-                            <input type="number" id="trk_yanlis" name="trk_yanlis" min="0" max="40" placeholder="0" required>
-                        </div>
-                    </div>
-
+                <div id="denemeAlanField" hidden>
+                    <label class="modal-label" for="denemeAlan" style="margin-top:0.6rem;" data-i18n="modal.addDeneme.field">Alan</label>
+                    <select id="denemeAlan" name="alan">
+                        <option value="sayisal">Sayısal</option>
+                        <option value="ea">Eşit Ağırlık</option>
+                        <option value="sozel">Sözel</option>
+                    </select>
                 </div>
 
-                <button type="submit" class="submit-button" style="margin-top:1.4rem;">Sonucu Kaydet</button>
+                <div class="deneme-subject-grid" id="denemeSubjectGrid"></div>
+
+                <button type="submit" class="submit-button" style="margin-top:1.4rem;" data-i18n="modal.addDeneme.submit">Sonucu Kaydet</button>
             </form>
         </div>
     </div>
@@ -251,11 +249,11 @@
     <div class="modal-overlay" id="denemeHistoryOverlay" hidden>
         <div class="modal-card modal-card--wide" role="dialog" aria-modal="true" aria-labelledby="denemeHistoryTitle">
             <div class="modal-head">
-                <h2 id="denemeHistoryTitle">Deneme Geçmişi</h2>
+                <h2 id="denemeHistoryTitle" data-i18n="deneme.historyTitle">Deneme Geçmişi</h2>
                 <button type="button" class="modal-close" id="closeDenemeHistoryBtn" aria-label="Kapat">✕</button>
             </div>
             <div id="denemeHistoryContent">
-                <p class="deneme-empty" style="text-align:center; color:var(--slate-soft);">Henüz deneme kaydı yok.</p>
+                <p class="deneme-empty" style="text-align:center; color:var(--slate-soft);" data-i18n="deneme.historyEmpty">Henüz deneme kaydı yok.</p>
             </div>
         </div>
     </div>
@@ -263,6 +261,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/main.js"></script>
 
 </body>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro | Süreç YKS</title>
+    <script>
+        (function () {
+            try {
+                var pref = localStorage.getItem('surecYksTheme') || 'system';
+                var theme = (pref === 'dark' || pref === 'light') ? pref :
+                    ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { /* private mode */ }
+        })();
+    </script>
+    <link rel="stylesheet" href="../css/style.css"/>
+    <link rel="icon" type="image/x-icon" href="../images/logo.png">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <nav class="dash-nav">
+        <div class="dash-brand">
+            <img src="../images/logo.png" alt="Süreç YKS logosu" class="dash-brand-mark">
+            Süreç YKS
+        </div>
+
+        <ul class="dash-links">
+            <li><a href="main.html" data-i18n="nav.panel">Panel</a></li>
+            <li><a href="main.html#planSection" data-i18n="nav.plan">Çalışma Planı</a></li>
+            <li><a href="main.html#denemeSection" data-i18n="nav.denemeler">Denemeler</a></li>
+            <li><a href="pomodoro.html" class="active" data-i18n="hero.pomodoroButton">Pomodoro</a></li>
+        </ul>
+
+        <a href="main.html" class="link-btn" data-i18n="pomodoro.backToDashboard">Panele Dön</a>
+    </nav>
+
+    <section class="dash-hero">
+        <div>
+            <h1 data-i18n="pomodoro.title">Pomodoro Zamanlayıcı</h1>
+            <p data-i18n="pomodoro.subtitle">25 dakika odaklan, 5 dakika dinlen.</p>
+        </div>
+    </section>
+
+    <div class="pomodoro-grid">
+
+        <div class="card pomodoro-card">
+            <div class="pomodoro-mode-badge" id="pomodoroModeBadge">Odaklanma</div>
+
+            <div class="pomodoro-ring" id="pomodoroRing">
+                <div class="pomodoro-ring-inner">
+                    <span class="pomodoro-timer" id="pomodoroTimer">25:00</span>
+                    <span class="pomodoro-round" id="pomodoroRound">Pomodoro 1 / 4</span>
+                </div>
+            </div>
+
+            <div class="pomodoro-controls">
+                <button type="button" class="submit-button pomodoro-btn-main" id="pomodoroStartPause">Başlat</button>
+                <button type="button" class="pomodoro-btn-secondary" id="pomodoroSkip" data-i18n="pomodoro.skip">Atla</button>
+                <button type="button" class="pomodoro-btn-secondary" id="pomodoroReset" data-i18n="pomodoro.reset">Sıfırla</button>
+            </div>
+        </div>
+
+        <div class="pomodoro-side">
+
+            <div class="card">
+                <div class="card-head">
+                    <h2 data-i18n="pomodoro.completedTitle">Bugün Tamamlanan Pomodoro</h2>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-number" id="pomodoroCompletedToday">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h2 data-i18n="pomodoro.settingsTitle">Ayarlar</h2>
+                </div>
+                <form id="pomodoroSettingsForm">
+                    <label class="modal-label" for="settingWork" data-i18n="pomodoro.settingsWork">Odaklanma (dk)</label>
+                    <input type="number" id="settingWork" min="1" max="120" value="25" required>
+
+                    <label class="modal-label" for="settingShortBreak" data-i18n="pomodoro.settingsShortBreak">Kısa Mola (dk)</label>
+                    <input type="number" id="settingShortBreak" min="1" max="60" value="5" required>
+
+                    <label class="modal-label" for="settingLongBreak" data-i18n="pomodoro.settingsLongBreak">Uzun Mola (dk)</label>
+                    <input type="number" id="settingLongBreak" min="1" max="60" value="15" required>
+
+                    <label class="modal-label" for="settingRounds" data-i18n="pomodoro.settingsRounds">Uzun Moladan Önceki Tur Sayısı</label>
+                    <input type="number" id="settingRounds" min="1" max="12" value="4" required>
+
+                    <button type="submit" class="submit-button" data-i18n="pomodoro.settingsApply">Ayarları Uygula</button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../js/theme.js"></script>
+<script src="../js/i18n.js"></script>
+<script src="../js/pomodoro.js"></script>
+
+</body>
+</html>

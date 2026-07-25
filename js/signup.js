@@ -1,6 +1,6 @@
 const signupform = document.querySelector("form");
 
-signupform.addEventListener('submit', function(event) {
+signupform.addEventListener('submit', async function(event) {
     event.preventDefault();
     const formData = new FormData(signupform);
 
@@ -11,22 +11,26 @@ signupform.addEventListener('submit', function(event) {
     const confPassword = formData.get('confpassword');
 
     if (password !== confPassword) {
-        alert("Şifreler eşleşmiyor! Lütfen tekrar kontrol edin.");
+        alert(t('auth.passwordMismatch'));
         return;
     }
 
-    const userData = {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password 
-    };
-    
-    localStorage.setItem('registeredUser', JSON.stringify(userData));
+    try {
+        const response = await fetch('/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ firstName, lastName, email, password, confPassword }),
+        });
+        const data = await response.json();
 
-    console.log("Veri localStorage'a kaydedildi:", userData);
-    
-    alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.");
-    window.location.href = "index.html";
+        if (!response.ok) {
+            alert(data.error || t('auth.signupFailed'));
+            return;
+        }
+
+        alert(t('auth.signupSuccess'));
+        window.location.href = "main.html";
+    } catch (err) {
+        alert(t('auth.connectionError'));
+    }
 });
-//note for the next dev: pls dont use localstorage, it ruins everything.

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil | Süreç YKS</title>
+    <script>
+        (function () {
+            try {
+                var pref = localStorage.getItem('surecYksTheme') || 'system';
+                var theme = (pref === 'dark' || pref === 'light') ? pref :
+                    ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { /* private mode */ }
+        })();
+    </script>
+    <link rel="stylesheet" href="../css/style.css"/>
+    <link rel="icon" type="image/x-icon" href="../images/logo.png">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <nav class="dash-nav">
+        <div class="dash-brand">
+            <img src="../images/logo.png" alt="Süreç YKS logosu" class="dash-brand-mark">
+            Süreç YKS
+        </div>
+
+        <ul class="dash-links">
+            <li><a href="main.html" data-i18n="nav.panel">Panel</a></li>
+            <li><a href="main.html#planSection" data-i18n="nav.plan">Çalışma Planı</a></li>
+            <li><a href="main.html#denemeSection" data-i18n="nav.denemeler">Denemeler</a></li>
+            <li><a href="pomodoro.html" data-i18n="hero.pomodoroButton">Pomodoro</a></li>
+        </ul>
+
+        <a href="main.html" class="link-btn" data-i18n="profile.backToDashboard">Panele Dön</a>
+    </nav>
+
+    <section class="dash-hero">
+        <div>
+            <h1 data-i18n="profile.title">Profil</h1>
+            <p id="profileMemberSince"></p>
+        </div>
+    </section>
+
+    <div class="profile-grid">
+
+        <div class="card">
+            <div class="card-head">
+                <h2 data-i18n="profile.accountInfo">Hesap Bilgileri</h2>
+            </div>
+            <form id="profileForm">
+                <label class="modal-label" for="profileFirstName" data-i18n="profile.firstName">Ad</label>
+                <input type="text" id="profileFirstName" name="firstName" required>
+
+                <label class="modal-label" for="profileLastName" data-i18n="profile.lastName">Soyad</label>
+                <input type="text" id="profileLastName" name="lastName" required>
+
+                <label class="modal-label" for="profileEmail" data-i18n="profile.email">Email</label>
+                <input type="email" id="profileEmail" name="email" disabled>
+
+                <button type="submit" class="submit-button" data-i18n="profile.saveChanges">Değişiklikleri Kaydet</button>
+                <p class="form-message" id="profileMessage" hidden></p>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <h2 data-i18n="profile.changePassword">Şifre Değiştir</h2>
+            </div>
+            <form id="passwordForm">
+                <label class="modal-label" for="currentPassword" data-i18n="profile.currentPassword">Mevcut Şifre</label>
+                <input type="password" id="currentPassword" name="currentPassword" required>
+
+                <label class="modal-label" for="newPassword" data-i18n="profile.newPassword">Yeni Şifre</label>
+                <input type="password" id="newPassword" name="newPassword" required minlength="6">
+
+                <label class="modal-label" for="confirmNewPassword" data-i18n="profile.confirmNewPassword">Yeni Şifreyi Doğrula</label>
+                <input type="password" id="confirmNewPassword" name="confirmNewPassword" required minlength="6">
+
+                <button type="submit" class="submit-button" data-i18n="profile.updatePassword">Şifreyi Güncelle</button>
+                <p class="form-message" id="passwordMessage" hidden></p>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <h2 data-i18n="profile.preferences">Tercihler</h2>
+            </div>
+
+            <label class="modal-label" for="themeSelect" data-i18n="profile.theme">Görünüm</label>
+            <select id="themeSelect" data-theme-select>
+                <option value="light" data-i18n="profile.themeLight">Açık</option>
+                <option value="dark" data-i18n="profile.themeDark">Koyu</option>
+                <option value="system" data-i18n="profile.themeSystem">Sistem</option>
+            </select>
+
+            <label class="modal-label" for="langSelect" style="margin-top:1rem;" data-i18n="profile.language">Dil</label>
+            <select id="langSelect" data-lang-select>
+                <option value="tr">Türkçe</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../js/theme.js"></script>
+<script src="../js/i18n.js"></script>
+<script src="../js/profile.js"></script>
+
+</body>
+</html>

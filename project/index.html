@@ -4,44 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giriş Yap | Süreç YKS</title>
+    <script>
+        (function () {
+            try {
+                var pref = localStorage.getItem('surecYksTheme') || 'system';
+                var theme = (pref === 'dark' || pref === 'light') ? pref :
+                    ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { /* private mode */ }
+        })();
+    </script>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" type="image/x-icon" href="../images/logo.png">
 </head>
 
 <body>
 
+<div class="pref-controls">
+    <div class="lang-toggle-group">
+        <button type="button" class="lang-toggle-btn" data-lang-toggle="tr">TR</button>
+        <button type="button" class="lang-toggle-btn" data-lang-toggle="en">EN</button>
+    </div>
+    <button type="button" class="theme-toggle-btn" data-theme-toggle aria-label="Temayı değiştir">🌙</button>
+</div>
+
 <div class="auth-container">
 
     <div class="auth-box">
 
         <h1>Süreç YKS</h1>
-        <p>Tekrar hoş geldin.</p>
+        <p data-i18n="auth.welcomeBack">Tekrar hoş geldin.</p>
 
         <form>
-            <input type="text" placeholder="Email Adresiniz" id="email" name="email" required>
-            <input type="password" placeholder="Şifreniz" id="password" name="password" required>
+            <input type="text" placeholder="Email Adresiniz" data-i18n-placeholder="auth.emailPlaceholder" id="email" name="email" required>
+            <input type="password" placeholder="Şifreniz" data-i18n-placeholder="auth.passwordPlaceholder" id="password" name="password" required>
 
             <div class="auth-options">
 
                 <label class="beni-hatirla">
-                    <input type="checkbox">
-                    Beni hatırla
+                    <input type="checkbox" id="remember" name="remember">
+                    <span data-i18n="auth.rememberMe">Beni hatırla</span>
                 </label>
-
-                <a href="#">Şifremi unuttum</a> <!--FIX HREF OR REMOVE COMPLETELY-->
 
             </div>
 
-            <button class="submit-button" type="submit">Giriş Yap</button> <br>
+            <button class="submit-button" type="submit" data-i18n="auth.login">Giriş Yap</button> <br>
 
         </form>
 
-        <div class="login-link"><a href="signup.html" >Hesabın Yok Mu?</a></div>
+        <div class="login-link"><a href="signup.html" data-i18n="auth.noAccount">Hesabın Yok Mu?</a></div>
 
     </div>
 
 </div>
 
+<script src="../js/theme.js"></script>
+<script src="../js/i18n.js"></script>
 <script src="../js/login.js"></script>
 
 </body>
